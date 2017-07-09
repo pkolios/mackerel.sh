@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Welcome | Mackerel (a minimal static website generator)</title>
+    <link rel="stylesheet" href="_static/styles.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico" />
+    <link rel="apple-touch-icon" href="_static/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  </head>
+  <body>    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+              <h1>Mackerel</h1>
+<p>Mackerel is a minimal static site generator written in typed Python 3.6+.</p>
+<p><a href="https://pypi.python.org/pypi/mackerel/"><img src="https://img.shields.io/pypi/v/mackerel.svg" alt="Latest Version"></a>
+<a href="https://travis-ci.org/pkolios/mackerel"><img src="https://travis-ci.org/pkolios/mackerel.svg?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/r/pkolios/mackerel"><img src="https://coveralls.io/repos/pkolios/mackerel/badge.svg?branch=master" alt="Coverage Status"></a></p>
+<h2>Installation</h2>
+<p>This part of the documentation covers the installation of Mackerel.</p>
+<h3>pip install</h3>
+<p>To install Mackerel, simply run this command in your terminal of choice:</p>
+<pre><code>$ pip install mackerel
+</code></pre>
+<p>If you don't have pip installed, this <a href="https://pip.pypa.io/en/stable/installing/">pip installation guide</a> can guide you through the process.</p>
+<h3>Get the Source Code</h3>
+<p>Mackerel is developed on GitHub, where the <a href="https://github.com/pkolios/mackerel">source code is available</a>.</p>
+<p>You can clone the public repository:</p>
+<pre><code>$ git clone git@github.com:pkolios/mackerel.git
+</code></pre>
+<p>Once you have a copy of the repository you can install it:</p>
+<pre><code>$ cd mackerel
+$ pip install -e .
+</code></pre>
+<h2>Basic Usage</h2>
+<p>After succesfully installing mackerel you can use the mackerel cli to initialize a new site or build an existing one.</p>
+<h3>Start a new site</h3>
+<p>Mackerel's cli provides with an <code>init</code> command that generates a new site under the given directory name.</p>
+<pre><code>$ mackerel init ~/my_site
+</code></pre>
+<p>The mackerel directory structure looks like this:</p>
+<pre><code>.
+├── .mackerelconfig  # The configuration file of this site
+├── content  # The site's content
+└── template  # The site's template
+</code></pre>
+<p>You can have a look at the generated <code>.mackerelconfig</code> file and <code>content</code> directory and alter them to your liking.
+For further documentation regarding the template development see the Template development section.</p>
+<h3>Build your site</h3>
+<p>The new site already contains some demo content and a template. The <code>build</code> command will build the site.</p>
+<pre><code>$ mackerel build ~/my_site
+</code></pre>
+<p>The static site will be generated inside the <code>_build</code> directory of the site.
+You can use python's simple http server to preview the site locally.</p>
+<pre><code>$ cd ~/my_site/_build
+$ python -m SimpleHTTPServer
+</code></pre>
+<h3>Create a new page or post</h3>
+<p>Using your favorite editor, create a new <code>.md</code> file anywhere in the site's <code>content</code> directory.
+Make sure the new file has the <code>.md</code> file extension. The content file has two sections.
+The top section that contains metadata keys and values related to this document.</p>
+<pre><code>Title: New page
+Author: John Doe
+Date: December 31, 2099
+Template: page.html
+Custom_meta: Nyancat
+
+...
+</code></pre>
+<p>And the main section that contains the actual content.</p>
+<pre><code>...
+
+This is the main content of this document written in Markdown.
+</code></pre>
+<h2>Configuration</h2>
+<p>The <code>.mackerelconfig</code> file contains the configuration for the site</p>
+<pre><code>[mackerel]
+    OUTPUT_PATH = _build  # Sets the build output directory
+    CONTENT_PATH = content  # Specifies the site's content directory
+    TEMPLATE_PATH = template  # Specifies the site's template directory
+
+[navigation]  # This section is used to define navigation menus for the template
+    main = index.md, about.md  # The main navigation consists of the index and the about documents
+
+[user]  # This section contains all the user / template site-wide settings
+    title = Mackerel Example Site  # The site's title
+    description = A beautiful narrative written with Mackerel. The story begins here.  # The site's description
+    logo = img/logo.svg  # The path to the site's logo inside the content directory
+    url = http://localhost:8000/  # The site's url (supports sub directories ex. /blog/)
+    copyright = 2017 Paris Kolios  # Site-wide copyright string
+    powered = https://github.com/pkolios/mackerel  # Site-wide powered-by string
+</code></pre>
+<h2>Template development</h2>
+<p>Currently the chosen template engine is <a href="http://jinja.pocoo.org/">Jinja2</a>.
+When rendering the content files, Mackerel passes the following objects to the template:</p>
+<ul>
+<li><code>document</code> - the document that is currently being generated</li>
+<li><code>ctx</code> - the context object that contains the navigation &amp; config objects<ul>
+<li><code>ctx.nav</code> - the navigation object</li>
+<li><code>ctx.cfg</code> - the config parser object</li>
+</ul>
+</li>
+</ul>
+<h2>Built With</h2>
+<ul>
+<li><a href="https://www.python.org/">Python 3</a></li>
+<li><a href="http://mypy.readthedocs.io">mypy</a> Static type checker</li>
+<li><a href="http://jinja.pocoo.org/">Jinja2</a> Template engine</li>
+<li><a href="http://mistune.readthedocs.io">mistune</a> Markdown parser in pure Python</li>
+</ul>
+<h2>Changelog</h2>
+<h3>Version 0.1</h3>
+<p>First preview release.</p>
+<h2>License</h2>
+<p>See the <a href="https://raw.githubusercontent.com/pkolios/mackerel/master/LICENSE">LICENSE</a> file for details.</p>
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>    <div class="footer">
+        &copy;2017 Paris Kolios.
+        | Powered by <a href="https://github.com/pkolios/mackerel">mackerel</a>
+    </div>  </body>
+</html>
